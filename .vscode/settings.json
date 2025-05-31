@@ -1,0 +1,11 @@
+{
+    "sqltools.useNodeRuntime": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "DuckDB",
+            "database": "ae_exam_db.duckdb",
+            "name": "lmwn"
+        }
+    ]
+}

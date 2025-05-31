@@ -1,0 +1,7 @@
+lmwn_ae_exam:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ae_exam_db.duckdb
+      schema: main
