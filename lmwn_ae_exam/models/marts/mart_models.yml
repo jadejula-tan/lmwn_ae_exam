@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: report_campaign_effectiveness_report
+    description: "Report to evaluate the performance of advertising campaigns across digital platforms and understand campaign performance in terms of user engagement, cost efficiency, and resulting transactions."
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: campaign_name
+        data_type: STRING
+      - name: campaign_start_date
+        data_type: DATE
+      - name: campaign_end_date
+        data_type: DATE
+      - name: campaign_type
+        data_type: STRING
+      - name: campaign_objective
+        data_type: STRING
+      - name: campaign_channel
+        data_type: STRING
+      - name: campaign_budget
+        data_type: DOUBLE
+      - name: cost_model
+        data_type: STRING
+      - name: targeting_strategy
+        data_type: STRING
+      - name: campaign_interaction_date
+        data_type: DATE
+      - name: total_interactions
+        data_type: BIGINT
+      - name: total_clicks
+        data_type: BIGINT
+      - name: total_impressions
+        data_type: BIGINT
+      - name: total_conversions
+        data_type: BIGINT
+      - name: average_cost_per_click
+        data_type: DOUBLE
+      - name: average_cost_per_impression
+        data_type: DOUBLE
+      - name: average_cost_per_conversion
+        data_type: DOUBLE
+      - name: average_revenue_per_conversion
+        data_type: DOUBLE
+      - name: total_revenue
+        data_type: DOUBLE
+      - name: total_ad_cost
+        data_type: DOUBLE
+      - name: return_on_ad_spend
+        data_type: DOUBLE
+      - name: average_cost_per_new_customer
+        data_type: DOUBLE
+      - name: average_session_duration
+        description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
+        data_type: TIME
