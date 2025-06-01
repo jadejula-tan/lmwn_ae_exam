@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: model_int_campaign_interactions_with_session_info
+    description: "Customers interactions joined with session info."
+    columns:
+      - name: interaction_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: campaign_id
+        data_type: STRING
+      - name: customer_id
+        data_type: STRING
+      - name: interaction_datetime
+        data_type: TIMESTAMP
+      - name: interaction_type
+        data_type: STRING
+      - name: platform
+        data_type: STRING
+      - name: device_type
+        data_type: STRING
+      - name: ad_cost
+        data_type: DOUBLE
+      - name: order_id
+        data_type: STRING
+      - name: is_new_customer
+        data_type: BOOLEAN
+      - name: revenue
+        data_type: DOUBLE
+      - name: session_id
+        data_type: STRING
+      - name: session_start
+        data_type: TIMESTAMP
+      - name: session_end
+        data_type: TIMESTAMP
+      - name: session_duration
+        data_type: TIME
+      - name: device_type
+        data_type: STRING
+      - name: os_version
+        data_type: DOUBLE
+      - name: app_version
+        data_type: STRING
+      - name: location
+        data_type: STRING
+  - name: model_int_campaign_performance_daily
+    description: "Aggregated model containing campaign daily performance metrics."
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: campaign_interaction_date
+        data_type: DATE
+      - name: total_interactions
+        data_type: BIGINT
+      - name: total_clicks
+        data_type: BIGINT
+      - name: total_impressions
+        data_type: BIGINT
+      - name: total_conversions
+        data_type: BIGINT
+      - name: average_cost_per_click
+        data_type: DOUBLE
+      - name: average_cost_per_impression
+        data_type: DOUBLE
+      - name: average_cost_per_conversion
+        data_type: DOUBLE
+      - name: average_revenue_per_conversion
+        data_type: DOUBLE
+      - name: total_revenue
+        data_type: DOUBLE
+      - name: total_ad_cost
+        data_type: DOUBLE
+      - name: return_on_ad_spend
+        data_type: DOUBLE
+      - name: average_cost_per_new_customer
+        data_type: DOUBLE
+      - name: average_session_duration
+        description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
+        data_type: TIME
