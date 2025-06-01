@@ -1,0 +1,157 @@
+version: 2
+
+sources:
+  - name: main
+    schema: main
+    tables:
+      - name: campaign_master
+      - name: order_transactions
+      - name: campaign_interactions
+      - name: customers_master
+      - name: drivers_master
+      - name: restaurants_master
+      - name: support_tickets
+      - name: support_ticket_status_logs
+      - name: order_log_incentive_sessions_order_status_logs
+      - name: order_log_incentive_sessions_driver_incentive_logs
+      - name: order_log_incentive_sessions_customer_app_sessions
+
+models:
+  - name: model_stg_campaigns
+    description: "Staging model for campaign info."
+    columns:
+      - name: campaign_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: campaign_name
+        data_type: STRING
+      - name: campaign_start_date
+        data_type: DATE
+      - name: campaign_end_date
+        data_type: DATE
+      - name: campaign_type
+        data_type: STRING
+      - name: campaign_objective
+        data_type: STRING
+      - name: campaign_channel
+        data_type: STRING
+      - name: campaign_budget
+        data_type: DOUBLE
+      - name: cost_model
+        data_type: STRING
+      - name: targeting_strategy
+        data_type: STRING
+      - name: campaign_is_active
+        data_type: BOOLEAN
+  - name: model_stg_campaign_interactions
+    description: "Staging model for campaign interaction info."
+    columns:
+      - name: interaction_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: campaign_id
+        data_type: STRING
+      - name: customer_id
+        data_type: STRING
+      - name: interaction_datetime
+        data_type: TIMESTAMP
+      - name: interaction_type
+        data_type: STRING
+      - name: platform
+        data_type: STRING
+      - name: device_type
+        data_type: STRING
+      - name: ad_cost
+        data_type: DOUBLE
+      - name: order_id
+        data_type: STRING
+      - name: is_new_customer
+        data_type: BOOLEAN
+      - name: revenue
+        data_type: DOUBLE
+      - name: session_id
+        data_type: STRING
+  - name: model_stg_customers
+    description: "Staging model for customer info."
+    columns:
+      - name: customer_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: signup_date
+        data_type: DATE
+      - name: customer_segment
+        data_type: STRING
+      - name: status
+        data_type: STRING
+      - name: referral_source
+        data_type: STRING
+      - name: birth_year
+        data_type: BIGINT
+      - name: gender
+        data_type: STRING
+      - name: preferred_device
+        data_type: STRING
+  - name: model_stg_orders
+    description: "Staging model for order transactions."
+    columns:
+      - name: order_id
+        description: "Unique identifier for the order."
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        data_type: STRING
+      - name: restaurant_id
+        data_type: STRING
+      - name: driver_id
+        data_type: STRING
+      - name: order_datetime
+        data_type: TIMESTAMP
+      - name: pickup_datetime
+        data_type: TIMESTAMP
+      - name: delivery_datetime
+        data_type: TIMESTAMP
+      - name: order_status
+        data_type: STRING
+      - name: delivery_zone
+        data_type: STRING
+      - name: total_amount
+        data_type: DOUBLE
+      - name: payment_method
+        data_type: STRING
+      - name: is_late_delivery
+        data_type: BOOLEAN
+      - name: delivery_distance_km
+        data_type: DOUBLE
+  - name: model_stg_customer_app_session_logs
+    description: "Staging model for customers app session logs."
+    columns:
+      - name: session_id
+        description: "Unique identifier for the order."
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        data_type: STRING
+      - name: session_start
+        data_type: TIMESTAMP
+      - name: session_end
+        data_type: TIMESTAMP
+      - name: session_duration
+        data_type: TIME
+      - name: device_type
+        data_type: STRING
+      - name: os_version
+        data_type: DOUBLE
+      - name: app_version
+        data_type: STRING
+      - name: location
+        data_type: STRING
