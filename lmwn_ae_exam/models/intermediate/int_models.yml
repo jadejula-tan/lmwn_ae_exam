@@ -1,8 +1,8 @@
 version: 2
 
 models:
-  - name: model_int_campaign_interactions_with_session_info
-    description: "Customers interactions joined with session info."
+  - name: model_int_campaign_interactions_with_details
+    description: "Customers interactions joined with masters for additional details."
     columns:
       - name: interaction_id
         data_type: STRING
@@ -30,6 +30,8 @@ models:
       - name: revenue
         data_type: DOUBLE
       - name: session_id
+        data_type: STRING
+      - name: order_status
         data_type: STRING
       - name: session_start
         data_type: TIMESTAMP
@@ -79,3 +81,121 @@ models:
       - name: average_session_duration
         description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
         data_type: TIME
+      - name: total_new_customers
+        data_type: BIGINT
+      - name: total_customers_with_completed_orders
+        data_type: BIGINT
+  - name: model_int_customer_overview
+    description: "Aggregated model containing customer overview metrics."
+    columns:
+      - name: customer_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: signup_date
+        data_type: DATE
+      - name: customer_segment
+        data_type: STRING
+      - name: status
+        data_type: STRING
+      - name: referral_source
+        data_type: STRING
+      - name: birth_year
+        data_type: BIGINT
+      - name: gender
+        data_type: STRING
+      - name: preferred_device
+        data_type: STRING
+      - name: total_orders
+        data_type: BIGINT
+      - name: completed_orders
+        data_type: BIGINT
+      - name: total_completed_repeat_orders
+        data_type: BIGINT
+      - name: cancelled_orders
+        data_type: BIGINT
+      - name: failed_orders
+        data_type: BIGINT
+      - name: total_purchase_amount
+        data_type: DOUBLE
+      - name: total_completed_purchased_amount
+        data_type: DOUBLE
+      - name: total_cancelled_purchased_amount
+        data_type: DOUBLE
+      - name: total_failed_purchased_amount
+        data_type: DOUBLE
+      - name: average_purchased_value
+        data_type: DOUBLE
+      - name: average_completed_purchased_value
+        data_type: DOUBLE
+      - name: day_between_first_and_last_order
+        data_type: BIGINT
+      - name: first_interacted_campaign_id
+        data_type: STRING
+      - name: first_interacted_datetime
+        data_type: TIMESTAMP
+      - name: first_interacted_platform
+        data_type: STRING
+      - name: first_order_datetime
+        data_type: TIMESTAMP
+      - name: time_to_first_order
+        data_type: TIME
+      - name: active_time_after_first_order
+        description: "Time customer spent active on the application after their first order. However, this will show now, as there is no matching session_id"
+        data_type: TIME
+  - name: model_int_campaign_new_customer_behavior
+    description: "Model containing new campaign purchase behavior by platform."
+    columns:
+      - name: first_interacted_campaign_id
+        data_type: STRING
+      - name: first_interacted_platform
+        data_type: STRING
+      - name: total_orders
+        data_type: BIGINT
+      - name: total_completed_repeat_orders
+        data_type: BIGINT
+      - name: avg_purchase_amount
+        data_type: DOUBLE
+      - name: avg_completed_purchased_amount
+        data_type: DOUBLE
+      - name: avg_time_to_first_order
+        data_type: TIME
+      - name: avg_time_to_first_order
+        data_type: TIME
+  - name: model_int_campaign_performance_platform
+    description: "Aggregated model containing campaign platform performance metrics."
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: platform
+        data_type: STRING
+      - name: total_interactions
+        data_type: BIGINT
+      - name: total_clicks
+        data_type: BIGINT
+      - name: total_impressions
+        data_type: BIGINT
+      - name: total_conversions
+        data_type: BIGINT
+      - name: average_cost_per_click
+        data_type: DOUBLE
+      - name: average_cost_per_impression
+        data_type: DOUBLE
+      - name: average_cost_per_conversion
+        data_type: DOUBLE
+      - name: average_revenue_per_conversion
+        data_type: DOUBLE
+      - name: total_revenue
+        data_type: DOUBLE
+      - name: total_ad_cost
+        data_type: DOUBLE
+      - name: return_on_ad_spend
+        data_type: DOUBLE
+      - name: average_cost_per_new_customer
+        data_type: DOUBLE
+      - name: average_session_duration
+        description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
+        data_type: TIME
+      - name: total_new_customers
+        data_type: BIGINT
