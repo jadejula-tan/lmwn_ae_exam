@@ -53,3 +53,33 @@ models:
       - name: average_session_duration
         description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
         data_type: TIME
+      - name: total_customers_with_completed_orders
+        data_type: BIGINT
+  - name: report_customer_acquisition_report
+    description: "Report to understand how successful each campaign is at acquiring new customers and how those customers behave post-acquisition."
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: campaign_name
+        data_type: STRING
+      - name: campaign_platform
+        data_type: STRING
+      - name: total_ad_cost
+        data_type: DOUBLE
+      - name: total_new_customers
+        data_type: BIGINT
+      - name: average_cost_per_new_customer
+        data_type: DOUBLE
+      - name: total_orders
+        data_type: BIGINT
+      - name: total_completed_repeat_orders
+        data_type: BIGINT
+      - name: avg_purchase_amount
+        data_type: DOUBLE
+      - name: avg_completed_purchased_amount
+        data_type: DOUBLE
+      - name: avg_time_to_first_order
+        data_type: TIME
+      - name: avg_active_time_after_first_order
+        description: "Average active time on app after first order. However, this will show now, as there is no matching session_id"
+        data_type: TIME
