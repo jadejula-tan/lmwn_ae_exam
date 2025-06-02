@@ -31,4 +31,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   lmwn_ae_exam:
+    +persist_docs:
+      relation: true
+      columns: true
+    +contract:
+      enforced: true
     +materialized: table

@@ -4,7 +4,7 @@ SELECT
     sl.session_start,
     sl.session_end,
     sl.session_duration,
-    sl.device_type AS device_type,
+    sl.device_type AS session_device_type,
     sl.os_version,
     sl.app_version,
     sl.location

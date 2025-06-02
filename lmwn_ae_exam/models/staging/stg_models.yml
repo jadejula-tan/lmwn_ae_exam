@@ -146,7 +146,7 @@ models:
       - name: session_end
         data_type: TIMESTAMP
       - name: session_duration
-        data_type: TIME
+        data_type: INTERVAL
       - name: device_type
         data_type: STRING
       - name: os_version
