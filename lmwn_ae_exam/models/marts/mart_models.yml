@@ -29,11 +29,11 @@ models:
       - name: total_interactions
         data_type: BIGINT
       - name: total_clicks
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: total_impressions
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: total_conversions
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: average_cost_per_click
         data_type: DOUBLE
       - name: average_cost_per_impression
@@ -52,7 +52,7 @@ models:
         data_type: DOUBLE
       - name: average_session_duration
         description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
-        data_type: TIME
+        data_type: INTERVAL
       - name: total_customers_with_completed_orders
         data_type: BIGINT
   - name: report_customer_acquisition_report
@@ -71,15 +71,42 @@ models:
       - name: average_cost_per_new_customer
         data_type: DOUBLE
       - name: total_orders
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: total_completed_repeat_orders
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: avg_purchase_amount
         data_type: DOUBLE
       - name: avg_completed_purchased_amount
         data_type: DOUBLE
       - name: avg_time_to_first_order
-        data_type: TIME
+        data_type: INTERVAL
       - name: avg_active_time_after_first_order
         description: "Average active time on app after first order. However, this will show now, as there is no matching session_id"
-        data_type: TIME
+        data_type: INTERVAL
+  - name: report_retargeting_performance_report
+    description: "Report to evaluate retargeting campaigns that aim to bring back previous or inactive customers and see if the strategy effectively re-engages past users."
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: campaign_name
+        data_type: STRING
+      - name: campaign_objective
+        data_type: STRING
+      - name: targeting_strategy
+        data_type: STRING
+      - name: retargeted_customers
+        data_type: BIGINT
+      - name: retargeted_customers_with_recurring_orders
+        data_type: BIGINT
+      - name: return_to_recurring_customer_ratio
+        data_type: DOUBLE
+      - name: total_purchase_amount
+        data_type: DOUBLE
+      - name: retargeted_customers_with_reorder_within_7_days
+        data_type: BIGINT
+      - name: retargeted_customers_with_reorder_within_15_days
+        data_type: BIGINT
+      - name: retargeted_customers_with_reorder_within_30_days
+        data_type: BIGINT
+      - name: avg_day_between_original_and_return_order
+        data_type: DOUBLE
