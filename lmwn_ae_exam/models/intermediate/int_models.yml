@@ -38,8 +38,8 @@ models:
       - name: session_end
         data_type: TIMESTAMP
       - name: session_duration
-        data_type: TIME
-      - name: device_type
+        data_type: INTERVAL
+      - name: session_device_type
         data_type: STRING
       - name: os_version
         data_type: DOUBLE
@@ -57,11 +57,11 @@ models:
       - name: total_interactions
         data_type: BIGINT
       - name: total_clicks
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: total_impressions
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: total_conversions
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: average_cost_per_click
         data_type: DOUBLE
       - name: average_cost_per_impression
@@ -80,7 +80,7 @@ models:
         data_type: DOUBLE
       - name: average_session_duration
         description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
-        data_type: TIME
+        data_type: INTERVAL
       - name: total_new_customers
         data_type: BIGINT
       - name: total_customers_with_completed_orders
@@ -125,9 +125,9 @@ models:
         data_type: DOUBLE
       - name: total_failed_purchased_amount
         data_type: DOUBLE
-      - name: average_purchased_value
+      - name: average_purchased_amount
         data_type: DOUBLE
-      - name: average_completed_purchased_value
+      - name: average_completed_purchased_amount
         data_type: DOUBLE
       - name: day_between_first_and_last_order
         data_type: BIGINT
@@ -140,10 +140,10 @@ models:
       - name: first_order_datetime
         data_type: TIMESTAMP
       - name: time_to_first_order
-        data_type: TIME
+        data_type: INTERVAL
       - name: active_time_after_first_order
         description: "Time customer spent active on the application after their first order. However, this will show now, as there is no matching session_id"
-        data_type: TIME
+        data_type: INTERVAL
   - name: model_int_campaign_new_customer_behavior
     description: "Model containing new campaign purchase behavior by platform."
     columns:
@@ -152,17 +152,19 @@ models:
       - name: first_interacted_platform
         data_type: STRING
       - name: total_orders
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: total_completed_repeat_orders
-        data_type: BIGINT
+        data_type: HUGEINT
+      - name: avg_completed_orders
+        data_type: DOUBLE
       - name: avg_purchase_amount
         data_type: DOUBLE
       - name: avg_completed_purchased_amount
         data_type: DOUBLE
       - name: avg_time_to_first_order
-        data_type: TIME
-      - name: avg_time_to_first_order
-        data_type: TIME
+        data_type: INTERVAL
+      - name: avg_active_time_after_first_order
+        data_type: INTERVAL
   - name: model_int_campaign_performance_platform
     description: "Aggregated model containing campaign platform performance metrics."
     columns:
@@ -173,11 +175,11 @@ models:
       - name: total_interactions
         data_type: BIGINT
       - name: total_clicks
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: total_impressions
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: total_conversions
-        data_type: BIGINT
+        data_type: HUGEINT
       - name: average_cost_per_click
         data_type: DOUBLE
       - name: average_cost_per_impression
@@ -196,6 +198,36 @@ models:
         data_type: DOUBLE
       - name: average_session_duration
         description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
-        data_type: TIME
+        data_type: INTERVAL
       - name: total_new_customers
+        data_type: BIGINT
+  - name: model_int_campaign_retargeted_customer
+    description: "Aggregated model containing campaign retargeted customer metrics."
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: customer_id
+        data_type: STRING
+      - name: num_recurring_orders
+        data_type: BIGINT
+      - name: total_purchase_amount
+        data_type: DOUBLE
+      - name: has_order_within_7_days
+        data_type: BOOLEAN
+      - name: has_order_within_15_days
+        data_type: BOOLEAN
+      - name: has_order_within_30_days
+        data_type: BOOLEAN
+      - name: is_recurring_customer
+        data_type: BOOLEAN
+  - name: model_int_campaign_retargeted_customer_return_purchase
+    description: "Aggregated model containing campaign retargeted customer return purchase metrics."
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: customer_id
+        data_type: STRING
+      - name: first_order_datetime
+        data_type: TIMESTAMP
+      - name: day_between_original_and_return_order
         data_type: BIGINT
