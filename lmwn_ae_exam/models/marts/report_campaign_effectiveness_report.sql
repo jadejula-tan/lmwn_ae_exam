@@ -23,7 +23,8 @@ SELECT
     cpd.total_ad_cost,
     cpd.average_cost_per_new_customer,
     cpd.return_on_ad_spend,
-    cpd.average_session_duration
+    cpd.average_session_duration,
+    cpd.total_customers_with_completed_orders
 FROM
     {{ ref('model_stg_campaigns') }} AS cm
 LEFT JOIN
@@ -33,3 +34,6 @@ ON
     AND cpd.campaign_interaction_date BETWEEN cm.campaign_start_date AND cm.campaign_end_date
 WHERE
     cm.campaign_is_active = TRUE
+ORDER BY
+    cm.campaign_id,
+    cpd.campaign_interaction_date
