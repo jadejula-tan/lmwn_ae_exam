@@ -13,16 +13,11 @@ SELECT
     SUM(ad_cost) AS total_ad_cost,
     SUM(ad_cost) / COUNT(DISTINCT CASE WHEN is_new_customer THEN customer_id END) AS average_cost_per_new_customer,
     SUM(revenue) / SUM(ad_cost) AS return_on_ad_spend,
-    AVG(session_duration) AS average_session_duration
-    {# 
-        Marketing efficiency metrics Ideas:
-            average_cost_per_click,
-            average_cost_per_impression,
-            average_revenue_per_conversion,
-            average_session_duration,
-    #}
+    AVG(session_duration) AS average_session_duration,
+    COUNT(DISTINCT CASE WHEN is_new_customer THEN customer_id END) AS total_new_customers,
+    COUNT(DISTINCT CASE WHEN LOWER(order_status) = 'completed' THEN customer_id END) AS total_customers_with_completed_orders
 FROM
-    {{ ref('model_int_campaign_interactions_with_session_info') }}
+    {{ ref('model_int_campaign_interactions_with_details') }}
 GROUP BY
     1,
     2

@@ -1,5 +1,6 @@
 SELECT
     ci.*,
+    o.order_status,
     sl.session_start,
     sl.session_end,
     sl.session_duration,
@@ -13,3 +14,7 @@ LEFT JOIN
     {{ ref('model_stg_customer_app_session_logs') }} AS sl
 ON
     ci.session_id = sl.session_id
+LEFT JOIN
+    {{ ref('model_stg_orders') }} AS o
+ON
+    ci.order_id = o.order_id
