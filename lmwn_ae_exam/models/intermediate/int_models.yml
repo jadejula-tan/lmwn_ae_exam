@@ -334,3 +334,81 @@ models:
       data_type: BIGINT
     - name: total_active_drivers
       data_type: BIGINT
+  - name: model_int_order_incentive_responsiveness
+    description: "Intermediate model of orders with driver time responsiveness and incentives."
+    columns:
+      - name: order_id
+        description: "Unique identifier for the order."
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        data_type: STRING
+      - name: restaurant_id
+        data_type: STRING
+      - name: driver_id
+        data_type: STRING
+      - name: order_datetime
+        data_type: TIMESTAMP
+      - name: pickup_datetime
+        data_type: TIMESTAMP
+      - name: delivery_datetime
+        data_type: TIMESTAMP
+      - name: order_status
+        data_type: STRING
+      - name: delivery_zone
+        data_type: STRING
+      - name: total_amount
+        data_type: DOUBLE
+      - name: payment_method
+        data_type: STRING
+      - name: is_late_delivery
+        data_type: BOOLEAN
+      - name: delivery_distance_km
+        data_type: DOUBLE
+      - name: time_to_accept_minutes
+        data_type: BIGINT
+      - name: delivery_time_minutes
+        data_type: BIGINT
+      - name: incentive_program
+        data_type: STRING
+  - name: model_int_order_incentive_aggregated
+    description: "Aggregated model containing order incentive metrics."
+    columns:
+      - name: incentive_program
+        data_type: STRING
+      - name: total_orders
+        data_type: BIGINT
+      - name: completed_orders
+        data_type: BIGINT
+      - name: average_delivery_time_minutes
+        data_type: DOUBLE
+      - name: average_time_to_accept_minutes
+        data_type: DOUBLE
+      - name: total_order_amount
+        data_type: DOUBLE
+      - name: total_completed_order_amount
+        data_type: DOUBLE
+      - name: completed_order_rate
+        data_type: DOUBLE
+  - name: model_int_driver_incentive_aggregated
+    description: "Aggregated model containing driver incentive metrics."
+    columns:
+      - name: incentive_program
+        data_type: STRING
+      - name: total_drivers
+        data_type: BIGINT
+      - name: bonus_qualified_drivers
+        data_type: BIGINT
+      - name: total_bonus_amount
+        data_type: DOUBLE
+      - name: total_bonus_qualified_amount
+        data_type: DOUBLE
+      - name: average_bonus_amount
+        data_type: DOUBLE
+      - name: average_bonus_qualified_amount
+        data_type: DOUBLE
+      - name: bonus_qualified_rate
+        description: "Percentage of drivers who qualified for the bonus program. Use to determine driver satisfaction."
+        data_type: DOUBLE
