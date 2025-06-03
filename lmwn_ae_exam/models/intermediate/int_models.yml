@@ -302,3 +302,35 @@ models:
         data_type: DOUBLE
       - name: average_csat_score_no_mask
         data_type: DOUBLE
+  - name: model_int_delivery_zone_overview
+    description: "Aggregated model containing delivery zone overview metrics."
+    columns:
+      - name: delivery_zone
+        data_type: STRING
+      - name: total_orders
+        data_type: BIGINT
+      - name: total_completed_orders
+        data_type: BIGINT
+      - name: total_cancelled_orders
+        data_type: BIGINT
+      - name: avg_delivery_time_minutes
+        data_type: DOUBLE
+      - name: avg_delivery_distance_km
+        data_type: DOUBLE
+      - name: total_late_deliveries
+        data_type: BIGINT
+      - name: completion_rate
+        data_type: DOUBLE
+      - name: cancellation_rate
+        data_type: DOUBLE
+      - name: late_delivery_rate
+        data_type: DOUBLE
+  - name: model_int_driver_zone_aggregated
+    description: "Aggregated model containing driver zone metrics."
+    columns:
+    - name: region
+      data_type: STRING
+    - name: total_drivers
+      data_type: BIGINT
+    - name: total_active_drivers
+      data_type: BIGINT
