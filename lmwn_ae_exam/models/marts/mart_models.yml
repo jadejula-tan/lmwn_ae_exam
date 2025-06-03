@@ -110,3 +110,41 @@ models:
         data_type: BIGINT
       - name: avg_day_between_original_and_return_order
         data_type: DOUBLE
+  - name: report_driver_performance_report
+    description: "Assess the effectiveness and reliability of delivery drivers to support workforce evaluation and operational optimization."
+    columns:
+      - name: driver_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: vehicle_type
+        data_type: STRING
+      - name: region
+        data_type: STRING
+      - name: total_tasks
+        data_type: BIGINT
+      - name: total_completed_tasks
+        data_type: BIGINT
+      - name: late_completed_tasks
+        data_type: BIGINT
+      - name: avg_delivery_minutes
+        data_type: DOUBLE
+      - name: avg_time_to_accept_minutes
+        data_type: DOUBLE
+      - name: completion_rate
+        data_type: DOUBLE
+      - name: late_completion_rate
+        data_type: DOUBLE
+      - name: total_tickets
+        data_type: BIGINT
+      - name: count_rude_feedback
+        data_type: BIGINT
+      - name: count_no_mask_feedback
+        data_type: BIGINT
+      - name: average_csat_score
+        data_type: DOUBLE
+      - name: average_csat_score_rude
+        data_type: DOUBLE
+      - name: average_csat_score_no_mask
+        data_type: DOUBLE
