@@ -134,7 +134,6 @@ models:
     description: "Staging model for customers app session logs."
     columns:
       - name: session_id
-        description: "Unique identifier for the order."
         data_type: STRING
         tests:
           - unique
@@ -154,4 +153,74 @@ models:
       - name: app_version
         data_type: STRING
       - name: location
+        data_type: STRING
+  - name: model_stg_drivers
+    description: "Staging model for driver info."
+    columns:
+      - name: driver_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: join_date
+        data_type: DATE
+      - name: vehicle_type
+        data_type: STRING
+      - name: region
+        data_type: STRING
+      - name: active_status
+        data_type: STRING
+      - name: driver_rating
+        data_type: DOUBLE
+      - name: bonus_tier
+        data_type: STRING
+  - name: model_stg_orders_status_log
+    description: "Staging model for order status log."
+    columns:
+      - name: log_id
+        data_type: BIGINT
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        data_type: STRING
+      - name: status
+        data_type: STRING
+      - name: status_datetime
+        data_type: TIMESTAMP
+      - name: updated_by
+        data_type: STRING
+  - name: model_stg_support_ticket
+    description: "Staging model for support tickets."
+    columns:
+      - name: ticket_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        data_type: STRING
+      - name: customer_id
+        data_type: STRING
+      - name: driver_id
+        data_type: STRING
+      - name: restaurant_id
+        data_type: STRING
+      - name: issue_type
+        data_type: STRING
+      - name: issue_sub_type
+        data_type: STRING
+      - name: channel
+        data_type: STRING
+      - name: ticket_opened_datetime
+        data_type: TIMESTAMP
+      - name: ticket_resolved_datetime
+        data_type: TIMESTAMP
+      - name: ticket_status
+        data_type: STRING
+      - name: csat_score
+        data_type: BIGINT
+      - name: compensation_amount
+        data_type: BIGINT
+      - name: resolved_by_agent_id
         data_type: STRING
