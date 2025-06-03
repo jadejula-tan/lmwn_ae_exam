@@ -224,3 +224,28 @@ models:
         data_type: BIGINT
       - name: resolved_by_agent_id
         data_type: STRING
+  - name: model_stg_driver_incentive_logs
+    description: "Staging model for driver incentive logs."
+    columns:
+      - name: log_id
+        data_type: BIGINT
+        tests:
+          - unique
+          - not_null
+      - name: driver_id
+        data_type: STRING
+      - name: incentive_program
+        data_type: STRING
+      - name: bonus_amount
+        data_type: DOUBLE
+      - name: applied_date
+        data_type: DATE
+      - name: delivery_target
+        data_type: BIGINT
+      - name: actual_deliveries
+        data_type: BIGINT
+      - name: bonus_qualified
+        data_type: BOOLEAN
+      - name: region
+        data_type: STRING  
+      
