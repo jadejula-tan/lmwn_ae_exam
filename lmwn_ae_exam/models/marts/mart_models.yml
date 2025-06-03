@@ -148,3 +148,32 @@ models:
         data_type: DOUBLE
       - name: average_csat_score_no_mask
         data_type: DOUBLE
+  - name: report_delivery_zone_heatmap_report
+    description: "Analyze delivery zones to identify high-demand areas and optimize resource allocation."
+    columns:
+    - name: region
+      data_type: STRING
+    - name: total_drivers
+      data_type: BIGINT
+    - name: total_active_drivers
+      data_type: BIGINT
+    - name: total_orders
+      data_type: BIGINT
+    - name: total_completed_orders
+      data_type: BIGINT
+    - name: total_cancelled_orders
+      data_type: BIGINT
+    - name: total_late_deliveries
+      data_type: BIGINT
+    - name: avg_delivery_time_minutes
+      data_type: DOUBLE
+    - name: avg_delivery_distance_km
+      data_type: DOUBLE
+    - name: completion_rate
+      data_type: DOUBLE
+    - name: cancellation_rate
+      data_type: DOUBLE
+    - name: late_delivery_rate
+      data_type: DOUBLE
+    - name: supply_demand_ratio
+      data_type: DOUBLE
