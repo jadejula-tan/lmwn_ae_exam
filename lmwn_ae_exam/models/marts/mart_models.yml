@@ -253,3 +253,29 @@ models:
       - name: rating_after_complaint
         description: "Calculates a driver's adjusted rating after complaints by averaging their original rating with the total CSAT score from complaint tickets."
         data_type: DOUBLE
+  - name: report_restaurant_quality_complaint_report
+    description: "Monitor the quality of food and service provided by partner restaurants and ensure they align with platform standards."
+    columns:
+      - name: restaurant_id
+        data_type: STRING
+      - name: restaurant_name
+        data_type: STRING
+      - name: total_tickets
+        data_type: BIGINT
+      - name: issue_raised_ranked
+        data_type: STRING[]
+      - name: total_resolution_minutes
+        data_type: HUGEINT
+      - name: total_tickets_with_compensation
+        data_type: BIGINT
+      - name: total_compensation_amount
+        data_type: HUGEINT
+      - name: issue_rate
+        data_type: DOUBLE
+      - name: total_customer_with_complaints
+        data_type: BIGINT
+      - name: total_reorder_customers_after_complaint
+        data_type: BIGINT
+      - name: reorder_customer_lost_ratio
+        description: "Percentage of customers who did not reorder after a complaint. A ratio of closer to 1 indicates that a complaint does not desuade customers from reordering."
+        data_type: DOUBLE
