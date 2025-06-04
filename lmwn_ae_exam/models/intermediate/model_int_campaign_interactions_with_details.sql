@@ -3,7 +3,7 @@ SELECT
     o.order_status,
     sl.session_start,
     sl.session_end,
-    sl.session_duration,
+    sl.session_duration_minutes,
     sl.device_type AS session_device_type,
     sl.os_version,
     sl.app_version,

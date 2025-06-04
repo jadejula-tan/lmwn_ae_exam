@@ -13,7 +13,7 @@ SELECT
     SUM(ad_cost) AS total_ad_cost,
     SUM(ad_cost) / COUNT(DISTINCT CASE WHEN is_new_customer THEN customer_id END) AS average_cost_per_new_customer,
     SUM(revenue) / SUM(ad_cost) AS return_on_ad_spend,
-    AVG(session_duration) AS average_session_duration,
+    AVG(session_duration_minutes) AS average_session_duration,
     COUNT(DISTINCT CASE WHEN is_new_customer THEN customer_id END) AS total_new_customers,
     COUNT(DISTINCT CASE WHEN LOWER(order_status) = 'completed' THEN customer_id END) AS total_customers_with_completed_orders
 FROM

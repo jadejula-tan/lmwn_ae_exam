@@ -16,8 +16,8 @@ WITH customer_campaign_interaction_rn AS(
         ccir.interaction_datetime AS first_interacted_datetime,
         ccir.platform AS first_interacted_platform,
         o.order_datetime AS first_order_datetime,
-        o.order_datetime - ccir.interaction_datetime AS time_to_first_order,
-        sl.session_end - o.order_datetime AS active_time_after_first_order,
+        DATE_DIFF('minute',ccir.interaction_datetime, o.order_datetime) AS minutes_to_first_order,
+        DATE_DIFF('minute', o.order_datetime, sl.session_end) AS active_minutes_after_first_order
     FROM
         customer_campaign_interaction_rn AS ccir
     LEFT JOIN
@@ -74,8 +74,8 @@ SELECT
     nccis.first_interacted_datetime,
     nccis.first_interacted_platform,
     nccis.first_order_datetime,
-    nccis.time_to_first_order,
-    nccis.active_time_after_first_order
+    nccis.minutes_to_first_order,
+    nccis.active_minutes_after_first_order
 FROM
     {{ ref('model_stg_customers') }} AS c
 LEFT JOIN

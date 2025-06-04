@@ -37,8 +37,8 @@ models:
         data_type: TIMESTAMP
       - name: session_end
         data_type: TIMESTAMP
-      - name: session_duration
-        data_type: INTERVAL
+      - name: session_duration_minutes
+        data_type: BIGINT
       - name: session_device_type
         data_type: STRING
       - name: os_version
@@ -80,7 +80,7 @@ models:
         data_type: DOUBLE
       - name: average_session_duration
         description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
-        data_type: INTERVAL
+        data_type: DOUBLE
       - name: total_new_customers
         data_type: BIGINT
       - name: total_customers_with_completed_orders
@@ -139,11 +139,11 @@ models:
         data_type: STRING
       - name: first_order_datetime
         data_type: TIMESTAMP
-      - name: time_to_first_order
-        data_type: INTERVAL
-      - name: active_time_after_first_order
+      - name: minutes_to_first_order
+        data_type: BIGINT
+      - name: active_minutes_after_first_order
         description: "Time customer spent active on the application after their first order. However, this will show now, as there is no matching session_id"
-        data_type: INTERVAL
+        data_type: BIGINT
   - name: model_int_campaign_new_customer_behavior
     description: "Model containing new campaign purchase behavior by platform."
     columns:
@@ -161,10 +161,10 @@ models:
         data_type: DOUBLE
       - name: avg_completed_purchased_amount
         data_type: DOUBLE
-      - name: avg_time_to_first_order
-        data_type: INTERVAL
-      - name: avg_active_time_after_first_order
-        data_type: INTERVAL
+      - name: avg_minutes_to_first_order
+        data_type: DOUBLE
+      - name: avg_active_minutes_after_first_order
+        data_type: DOUBLE
   - name: model_int_campaign_performance_platform
     description: "Aggregated model containing campaign platform performance metrics."
     columns:
@@ -198,7 +198,7 @@ models:
         data_type: DOUBLE
       - name: average_session_duration
         description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
-        data_type: INTERVAL
+        data_type: DOUBLE
       - name: total_new_customers
         data_type: BIGINT
   - name: model_int_campaign_retargeted_customer

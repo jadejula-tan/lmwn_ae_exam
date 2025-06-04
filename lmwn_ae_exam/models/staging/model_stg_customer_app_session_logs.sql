@@ -13,6 +13,6 @@ WITH session_logs AS (
 )
 SELECT
     *,
-    session_end - session_start AS session_duration
+    DATE_DIFF('minute', session_start, session_end) AS session_duration_minutes
 FROM
     session_logs

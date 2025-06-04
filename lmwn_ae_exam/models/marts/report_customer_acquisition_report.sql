@@ -9,8 +9,8 @@ SELECT
     cncb.total_completed_repeat_orders,
     cncb.avg_purchase_amount,
     cncb.avg_completed_purchased_amount,
-    cncb.avg_time_to_first_order,
-    cncb.avg_active_time_after_first_order
+    cncb.avg_minutes_to_first_order,
+    cncb.avg_active_minutes_after_first_order
 FROM
     {{ ref('model_stg_campaigns') }} AS cm
 LEFT JOIN

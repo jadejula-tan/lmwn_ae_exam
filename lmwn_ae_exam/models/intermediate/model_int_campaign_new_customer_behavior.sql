@@ -6,8 +6,8 @@ SELECT
     AVG(completed_orders) AS avg_completed_orders,
     AVG(total_purchase_amount) AS avg_purchase_amount,
     AVG(total_completed_purchased_amount) AS avg_completed_purchased_amount,
-    AVG(time_to_first_order) AS avg_time_to_first_order,
-    AVG(active_time_after_first_order) AS avg_active_time_after_first_order
+    AVG(minutes_to_first_order) AS avg_minutes_to_first_order,
+    AVG(active_minutes_after_first_order) AS avg_active_minutes_after_first_order
 FROM
     {{ ref('model_int_customer_overview') }}
 WHERE

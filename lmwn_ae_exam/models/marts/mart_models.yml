@@ -52,7 +52,7 @@ models:
         data_type: DOUBLE
       - name: average_session_duration
         description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
-        data_type: INTERVAL
+        data_type: DOUBLE
       - name: total_customers_with_completed_orders
         data_type: BIGINT
   - name: report_customer_acquisition_report
@@ -78,11 +78,11 @@ models:
         data_type: DOUBLE
       - name: avg_completed_purchased_amount
         data_type: DOUBLE
-      - name: avg_time_to_first_order
-        data_type: INTERVAL
-      - name: avg_active_time_after_first_order
+      - name: avg_minutes_to_first_order
+        data_type: DOUBLE
+      - name: avg_active_minutes_after_first_order
         description: "Average active time on app after first order. However, this will show now, as there is no matching session_id"
-        data_type: INTERVAL
+        data_type: DOUBLE
   - name: report_retargeting_performance_report
     description: "Report to evaluate retargeting campaigns that aim to bring back previous or inactive customers and see if the strategy effectively re-engages past users."
     columns:

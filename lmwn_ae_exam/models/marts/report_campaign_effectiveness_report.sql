@@ -9,7 +9,6 @@ SELECT
     cm.campaign_budget,
     cm.cost_model,
     cm.targeting_strategy,
-    -- cm.campaign_is_active,
     cpd.campaign_interaction_date,
     cpd.total_interactions,
     cpd.total_clicks,
