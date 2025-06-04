@@ -9,6 +9,6 @@ SELECT
     CAST(budget AS DOUBLE) AS campaign_budget,
     cost_model,
     targeting_strategy,
-    CAST(is_active AS BOOLEAN) AS campaign_is_active,
+    CAST(is_active AS BOOLEAN) AS campaign_is_active
 FROM
     {{ source('main', 'campaign_master') }}
