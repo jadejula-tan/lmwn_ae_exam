@@ -457,4 +457,44 @@ models:
         data_type: BIGINT
       - name: sub_issue_rank
         data_type: BIGINT
-  
+  - name: model_int_restaurant_feedback
+    description: "Aggregated model containing restaurant feedback from customers."
+    columns:
+      - name: restaurant_id
+        data_type: STRING
+      - name: total_tickets
+        data_type: BIGINT
+      - name: total_customers
+        data_type: BIGINT
+      - name: total_csat_score
+        data_type: HUGEINT
+      - name: average_csat_score
+        data_type: DOUBLE
+      - name: total_resolution_time_minutes
+        data_type: HUGEINT
+      - name: total_tickets_with_compensation
+        data_type: BIGINT
+      - name: total_compensation_amount
+        data_type: HUGEINT
+      - name: issue_raised_ranked
+        data_type: STRING[]
+  - name: model_int_reorder_after_complaint_flag
+    description: "Aggregated model containing order transactions with reorder flag."
+    columns:
+      - name: order_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        data_type: STRING
+      - name: restaurant_id
+        data_type: STRING
+      - name: order_datetime
+        data_type: TIMESTAMP
+      - name: order_status
+        data_type: STRING
+      - name: total_amount
+        data_type: DOUBLE
+      - name: is_reorder_after_complaint
+        data_type: BOOLEAN
