@@ -296,12 +296,16 @@ models:
         data_type: BIGINT
       - name: count_no_mask_feedback
         data_type: BIGINT
+      - name: total_csat_score
+        data_type: HUGEINT
       - name: average_csat_score
         data_type: DOUBLE
       - name: average_csat_score_rude
         data_type: DOUBLE
       - name: average_csat_score_no_mask
         data_type: DOUBLE
+      - name: total_resolution_time_minutes
+        data_type: HUGEINT
       - name: issue_raised_ranked
         data_type: STRING[]
   - name: model_int_delivery_zone_overview
