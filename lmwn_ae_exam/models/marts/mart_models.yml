@@ -233,3 +233,23 @@ models:
         data_type: STRING
       - name: top_sub_issue_type_3
         data_type: STRING
+  - name: report_driver_complaint_report
+    description: "Identify behavioral or performance issues related to drivers and determine if certain drivers require further training or intervention."
+    columns:
+      - name: driver_id
+        data_type: STRING
+      - name: issue_count
+        data_type: BIGINT
+      - name: issue_raised_ranked
+        description: "List of issue type, ranked by frequency with most frequent first."
+        data_type: STRING[]
+      - name: total_resolution_minutes
+        data_type: HUGEINT
+      - name: issue_rate
+        data_type: DOUBLE
+      - name: rating_before_complaint
+        description: "Driver rating before complaint resolution based on driver rating in master"
+        data_type: DOUBLE
+      - name: rating_after_complaint
+        description: "Calculates a driver's adjusted rating after complaints by averaging their original rating with the total CSAT score from complaint tickets."
+        data_type: DOUBLE
