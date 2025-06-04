@@ -302,6 +302,8 @@ models:
         data_type: DOUBLE
       - name: average_csat_score_no_mask
         data_type: DOUBLE
+      - name: issue_raised_ranked
+        data_type: STRING[]
   - name: model_int_delivery_zone_overview
     description: "Aggregated model containing delivery zone overview metrics."
     columns:
@@ -412,3 +414,43 @@ models:
       - name: bonus_qualified_rate
         description: "Percentage of drivers who qualified for the bonus program. Use to determine driver satisfaction."
         data_type: DOUBLE
+  - name: model_int_ticket_monthly_aggregated
+    description: "Aggregated model containing monthly ticket metrics."
+    columns:
+      - name: month
+        data_type: STRING
+      - name: avg_resolution_time_minutes
+        data_type: DOUBLE
+      - name: total_tickets
+        data_type: BIGINT
+      - name: total_unresolved_tickets
+        data_type: BIGINT
+      - name: ticket_compensated_tickets
+        data_type: BIGINT
+      - name: total_compensation_amount
+        data_type: HUGEINT
+      - name: unresolved_ticket_ratio
+        data_type: DOUBLE
+  - name: model_int_ticket_monthly_issue_ranked
+    description: "Aggregated model ranking monthly ticket issue."
+    columns:
+      - name: month
+        data_type: STRING
+      - name: issue_type
+        data_type: STRING
+      - name: issue_count
+        data_type: BIGINT
+      - name: issue_rank
+        data_type: BIGINT
+  - name: model_int_ticket_monthly_sub_issue_ranked
+    description: "Aggregated model ranking monthly ticket sub issue."
+    columns:
+      - name: month
+        data_type: STRING
+      - name: issue_sub_type
+        data_type: STRING
+      - name: sub_issue_count
+        data_type: BIGINT
+      - name: sub_issue_rank
+        data_type: BIGINT
+  
