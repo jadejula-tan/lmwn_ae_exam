@@ -248,4 +248,23 @@ models:
         data_type: BOOLEAN
       - name: region
         data_type: STRING  
-      
+  - name: model_stg_restaurant
+    description: "Staging model for restaurant info."
+    columns:
+      - name: restaurant_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: restaurant_name
+        data_type: STRING
+      - name: category
+        data_type: STRING
+      - name: city
+        data_type: STRING
+      - name: average_rating
+        data_type: DOUBLE
+      - name: active_status
+        data_type: STRING
+      - name: prep_time_min
+        data_type: BIGINT
