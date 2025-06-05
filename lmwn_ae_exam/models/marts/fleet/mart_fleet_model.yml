@@ -1,0 +1,142 @@
+version: 2
+
+models:
+  - name: report_driver_performance_report
+    description: "Assess the effectiveness and reliability of delivery drivers to support workforce evaluation and operational optimization."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: ref("model_stg_drivers")
+    columns:
+      - name: driver_id
+        data_type: STRING
+        tests:
+          - unique
+          - not_null
+      - name: vehicle_type
+        data_type: STRING
+      - name: region
+        data_type: STRING
+      - name: total_tasks
+        data_type: BIGINT
+      - name: total_completed_tasks
+        data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: total_tasks
+      - name: late_completed_tasks
+        data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: total_completed_tasks
+      - name: avg_delivery_minutes
+        data_type: DOUBLE
+      - name: avg_time_to_accept_minutes
+        data_type: DOUBLE
+      - name: completion_rate
+        data_type: DOUBLE
+      - name: late_completion_rate
+        data_type: DOUBLE
+      - name: total_tickets
+        data_type: BIGINT
+      - name: count_rude_feedback
+        data_type: BIGINT
+      - name: count_no_mask_feedback
+        data_type: BIGINT
+      - name: average_csat_score
+        data_type: DOUBLE
+      - name: average_csat_score_rude
+        data_type: DOUBLE
+      - name: average_csat_score_no_mask
+        data_type: DOUBLE
+  - name: report_delivery_zone_heatmap_report
+    description: "Analyze delivery zones to identify high-demand areas and optimize resource allocation."
+    tests:
+      - dbt_expectations.expect_column_distinct_count_to_equal_other_table:
+            column_name: region
+            compare_model: ref("model_stg_drivers")
+            compare_column_name: region
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: SUM(total_drivers)
+          compare_model: ref("model_stg_drivers")
+          compare_expression: COUNT(1)
+    columns:
+    - name: region
+      data_type: STRING
+      tests:
+          - unique
+    - name: total_drivers
+      data_type: BIGINT
+    - name: total_active_drivers
+      data_type: BIGINT
+    - name: total_orders
+      data_type: BIGINT
+    - name: total_completed_orders
+      data_type: BIGINT
+    - name: total_cancelled_orders
+      data_type: BIGINT
+    - name: total_late_deliveries
+      data_type: BIGINT
+    - name: avg_delivery_time_minutes
+      data_type: DOUBLE
+    - name: avg_delivery_distance_km
+      data_type: DOUBLE
+    - name: completion_rate
+      data_type: DOUBLE
+    - name: cancellation_rate
+      data_type: DOUBLE
+    - name: late_delivery_rate
+      data_type: DOUBLE
+    - name: supply_demand_ratio
+      data_type: DOUBLE
+  - name: report_driver_incentive_impact_report
+    description: "Measure whether incentive programs for drivers (e.g., bonuses) lead to improved performance or just higher costs."
+    tests:
+      - dbt_expectations.expect_column_distinct_count_to_equal_other_table:
+            column_name: incentive_program
+            compare_model: ref("model_stg_driver_incentive_logs")
+            compare_column_name: incentive_program
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: SUM(total_orders)
+          compare_model: ref("model_stg_orders")
+          compare_expression: COUNT(DISTINCT order_id)
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: SUM(total_drivers)
+          group_by: [incentive_program]
+          compare_model: ref("model_stg_driver_incentive_logs")
+          compare_group_by: [incentive_program]
+          compare_expression: COUNT(DISTINCT driver_id)
+    columns:
+      - name: incentive_program
+        data_type: STRING
+        tests:
+          - unique
+      - name: total_drivers
+        data_type: BIGINT
+      - name: bonus_qualified_drivers
+        data_type: BIGINT
+      - name: total_orders
+        data_type: BIGINT
+      - name: completed_orders
+        data_type: BIGINT
+      - name: completed_order_rate
+        data_type: DOUBLE
+      - name: average_delivery_time_minutes
+        data_type: DOUBLE
+      - name: average_time_to_accept_minutes
+        data_type: DOUBLE
+      - name: driver_satisfaction_rate
+        description: "Driver satisfaction rate based on number of bonus qualified drivers vs. total participating drivers."
+        data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1
+      - name: average_bonus_qualified_amount
+        data_type: DOUBLE
+      - name: bonus_to_revenue_ratio
+        description: "Ratio of total bonus paid to total revenue generated by drivers. Would be better if we could compare the percentage LMWN gets from each completed order with the total bonus payout, but the info is not available."
+        data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1

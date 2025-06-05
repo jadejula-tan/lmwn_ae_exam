@@ -1,0 +1,151 @@
+version: 2
+
+models:
+  - name: report_campaign_effectiveness_report
+    description: "Report to evaluate the performance of advertising campaigns across digital platforms and understand campaign performance in terms of user engagement, cost efficiency, and resulting transactions."
+    tests:
+      - dbt_expectations.expect_column_distinct_count_to_equal_other_table:
+          description: "Since this report compares different period, the number of rows cannot directly be compared to the staging table. For simplicity, we will compare the number of distinct campaign_id in this report with the staging table."
+          column_name: campaign_id
+          compare_model: ref("model_stg_campaigns")
+          compare_column_name: campaign_id
+          compare_row_condition: "campaign_is_active = TRUE"
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: campaign_name
+        data_type: STRING
+      - name: campaign_start_date
+        data_type: DATE
+      - name: campaign_end_date
+        data_type: DATE
+      - name: campaign_type
+        data_type: STRING
+      - name: campaign_objective
+        data_type: STRING
+      - name: campaign_channel
+        data_type: STRING
+      - name: campaign_budget
+        data_type: DOUBLE
+      - name: cost_model
+        data_type: STRING
+      - name: targeting_strategy
+        data_type: STRING
+      - name: campaign_interaction_date
+        data_type: DATE
+      - name: total_interactions
+        data_type: BIGINT
+        tests:
+          - multi_column_sum:
+              multi_col_list: [total_clicks, total_impressions, total_conversions]
+      - name: total_clicks
+        data_type: HUGEINT
+      - name: total_impressions
+        data_type: HUGEINT
+      - name: total_conversions
+        data_type: HUGEINT
+      - name: average_cost_per_click
+        data_type: DOUBLE
+      - name: average_cost_per_impression
+        data_type: DOUBLE
+      - name: average_cost_per_conversion
+        data_type: DOUBLE
+      - name: average_revenue_per_conversion
+        data_type: DOUBLE
+      - name: total_revenue
+        data_type: DOUBLE
+      - name: total_ad_cost
+        data_type: DOUBLE
+      - name: return_on_ad_spend
+        data_type: DOUBLE
+      - name: average_cost_per_new_customer
+        data_type: DOUBLE
+      - name: average_session_duration
+        description: "Average duration of sessions for the campaign. However, this will show now, as there is no matching session_id"
+        data_type: DOUBLE
+      - name: total_customers_with_completed_orders
+        data_type: BIGINT
+  - name: report_customer_acquisition_report
+    description: "Report to understand how successful each campaign is at acquiring new customers and how those customers behave post-acquisition."
+    tests:
+      - dbt_expectations.expect_column_distinct_count_to_equal_other_table:
+          description: "Since this report expand each campaign by its targeted platform, the number of rows cannot directly be compared to the staging table. For simplicity, we will compare the number of distinct campaign_id in this report with the staging table."
+          column_name: campaign_id
+          compare_model: ref("model_stg_campaigns")
+          compare_column_name: campaign_id
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: ROUND(SUM(total_ad_cost),2)
+          compare_model: ref("model_stg_campaign_interactions")
+          compare_expression: ROUND(SUM(ad_cost),2)
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: campaign_name
+        data_type: STRING
+      - name: campaign_platform
+        data_type: STRING
+        tests:
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ['facebook','google','tiktok']
+      - name: total_ad_cost
+        data_type: DOUBLE
+      - name: total_new_customers
+        data_type: BIGINT
+      - name: average_cost_per_new_customer
+        data_type: DOUBLE
+      - name: total_orders
+        data_type: HUGEINT
+      - name: total_completed_repeat_orders
+        data_type: HUGEINT
+      - name: avg_purchase_amount
+        data_type: DOUBLE
+      - name: avg_completed_purchased_amount
+        data_type: DOUBLE
+      - name: avg_minutes_to_first_order
+        data_type: DOUBLE
+      - name: avg_active_minutes_after_first_order
+        description: "Average active time on app after first order. However, this will show now, as there is no matching session_id"
+        data_type: DOUBLE
+  - name: report_retargeting_performance_report
+    description: "Report to evaluate retargeting campaigns that aim to bring back previous or inactive customers and see if the strategy effectively re-engages past users."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: ref("model_stg_campaigns")
+          compare_row_condition: "campaign_type = 'retargeting'"
+    columns:
+      - name: campaign_id
+        data_type: STRING
+      - name: campaign_name
+        data_type: STRING
+      - name: campaign_objective
+        data_type: STRING
+      - name: targeting_strategy
+        data_type: STRING
+      - name: retargeted_customers
+        data_type: BIGINT
+      - name: retargeted_customers_with_recurring_orders
+        data_type: BIGINT
+      - name: return_to_recurring_customer_ratio
+        data_type: DOUBLE
+      - name: total_purchase_amount
+        data_type: DOUBLE
+      - name: retargeted_customers_with_reorder_within_7_days
+        description: "Determine retargeted customers retention behavior. Show number of retargeted customers who made a reorder within 7 days."
+        data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: retargeted_customers
+      - name: retargeted_customers_with_reorder_within_15_days
+        description: "Determine retargeted customers retention behavior. Show number of retargeted customers who made a reorder within 15 days."
+        data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: retargeted_customers
+      - name: retargeted_customers_with_reorder_within_30_days
+        description: "Determine retargeted customers retention behavior. Show number of retargeted customers who made a reorder within 30 days."
+        data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: retargeted_customers
+      - name: avg_day_between_original_and_return_order
+        data_type: DOUBLE

@@ -1,0 +1,126 @@
+version: 2
+
+models:
+  - name: report_complaint_summary_dashboard
+    description: "High-level overview report of all customer complaints across the platform to prioritize problem areas and improve response processes."
+    tests:
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+            expression: COUNT(1)
+            compare_model: ref("model_stg_support_ticket")
+            compare_expression: COUNT(DISTINCT STRFTIME(ticket_opened_datetime, '%Y-%m'))
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: SUM(total_tickets)
+          compare_model: ref("model_stg_support_ticket")
+          compare_expression: COUNT(DISTINCT ticket_id)
+      - dbt_utils.expression_is_true:
+          description: "Ensure that the top issue types are distinct."
+          expression: "top_issue_type_1 != top_issue_type_2 AND top_issue_type_1 != top_issue_type_3 AND top_issue_type_2 != top_issue_type_3"
+      - dbt_utils.expression_is_true:
+          description: "Ensure that the top sub-issue types are distinct."
+          expression: "top_sub_issue_type_1 != top_sub_issue_type_2 AND top_sub_issue_type_1 != top_sub_issue_type_3 AND top_sub_issue_type_2 != top_sub_issue_type_3"
+    columns:
+      - name: month
+        data_type: STRING
+        tests:
+          - not_null
+          - unique
+      - name: total_tickets
+        data_type: BIGINT
+      - name: total_unresolved_tickets
+        data_type: BIGINT
+      - name: ticket_compensated_tickets
+        data_type: BIGINT
+      - name: total_compensation_amount
+        data_type: HUGEINT
+      - name: unresolved_ticket_ratio
+        data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1
+      - name: avg_resolution_time_minutes
+        data_type: DOUBLE
+      - name: top_issue_type_1
+        data_type: STRING
+      - name: top_issue_type_2
+        data_type: STRING
+      - name: top_issue_type_3
+        data_type: STRING
+      - name: top_sub_issue_type_1
+        data_type: STRING
+      - name: top_sub_issue_type_2
+        data_type: STRING
+      - name: top_sub_issue_type_3
+        data_type: STRING
+  - name: report_driver_complaint_report
+    description: "Identify behavioral or performance issues related to drivers and determine if certain drivers require further training or intervention."
+    columns:
+      - name: driver_id
+        data_type: STRING
+        tests:
+          - not_null
+          - unique
+      - name: issue_count
+        data_type: BIGINT
+        tests:
+          - not_null
+      - name: issue_raised_ranked
+        description: "List of issue type, ranked by frequency with most frequent first."
+        data_type: STRING[]
+      - name: total_resolution_minutes
+        data_type: HUGEINT
+      - name: issue_rate
+        data_type: DOUBLE
+      - name: rating_before_complaint
+        description: "Driver rating before complaint resolution based on driver rating in master"
+        data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 5
+      - name: rating_after_complaint
+        description: "Calculates a driver's adjusted rating after complaints by averaging their original rating with the total CSAT score from complaint tickets."
+        data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 5
+  - name: report_restaurant_quality_complaint_report
+    description: "Monitor the quality of food and service provided by partner restaurants and ensure they align with platform standards."
+    columns:
+      - name: restaurant_id
+        data_type: STRING
+        tests:
+          - not_null
+          - unique
+      - name: restaurant_name
+        data_type: STRING
+      - name: total_tickets
+        data_type: BIGINT
+        tests:
+          - not_null
+      - name: issue_raised_ranked
+        data_type: STRING[]
+      - name: total_resolution_minutes
+        data_type: HUGEINT
+      - name: total_tickets_with_compensation
+        data_type: BIGINT
+      - name: total_compensation_amount
+        data_type: HUGEINT
+      - name: issue_rate
+        data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1
+      - name: total_customer_with_complaints
+        data_type: BIGINT
+      - name: total_reorder_customers_after_complaint
+        data_type: BIGINT
+      - name: reorder_customer_lost_ratio
+        description: "Percentage of customers who did not reorder after a complaint. A ratio of closer to 1 indicates that a complaint does not desuade customers from reordering."
+        data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1
