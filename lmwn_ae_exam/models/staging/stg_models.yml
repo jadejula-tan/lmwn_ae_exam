@@ -19,6 +19,9 @@ sources:
 models:
   - name: model_stg_campaigns
     description: "Staging model for campaign info."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'campaign_master')
     columns:
       - name: campaign_id
         data_type: STRING
@@ -33,6 +36,9 @@ models:
         data_type: DATE
       - name: campaign_type
         data_type: STRING
+        tests:
+          - dbt_expectations.expect_column_values_to_have_consistent_casing:
+              display_inconsistent_columns: FALSE
       - name: campaign_objective
         data_type: STRING
       - name: campaign_channel
@@ -47,6 +53,9 @@ models:
         data_type: BOOLEAN
   - name: model_stg_campaign_interactions
     description: "Staging model for campaign interaction info."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'campaign_interactions')
     columns:
       - name: interaction_id
         data_type: STRING
@@ -75,8 +84,16 @@ models:
         data_type: DOUBLE
       - name: session_id
         data_type: STRING
+        tests:
+          - relationships:
+              to: ref('model_stg_customer_app_session_logs')
+              field: session_id
+              severity: warn
   - name: model_stg_customers
     description: "Staging model for customer info."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'customers_master')
     columns:
       - name: customer_id
         data_type: STRING
@@ -89,6 +106,9 @@ models:
         data_type: STRING
       - name: status
         data_type: STRING
+        tests:
+          - dbt_expectations.expect_column_values_to_have_consistent_casing:
+              display_inconsistent_columns: FALSE
       - name: referral_source
         data_type: STRING
       - name: birth_year
@@ -99,6 +119,9 @@ models:
         data_type: STRING
   - name: model_stg_orders
     description: "Staging model for order transactions."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'order_transactions')
     columns:
       - name: order_id
         description: "Unique identifier for the order."
@@ -120,6 +143,9 @@ models:
         data_type: TIMESTAMP
       - name: order_status
         data_type: STRING
+        tests:
+          - dbt_expectations.expect_column_values_to_have_consistent_casing:
+              display_inconsistent_columns: FALSE
       - name: delivery_zone
         data_type: STRING
       - name: total_amount
@@ -132,6 +158,9 @@ models:
         data_type: DOUBLE
   - name: model_stg_customer_app_session_logs
     description: "Staging model for customers app session logs."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'order_log_incentive_sessions_customer_app_sessions')
     columns:
       - name: session_id
         data_type: STRING
@@ -156,6 +185,9 @@ models:
         data_type: STRING
   - name: model_stg_drivers
     description: "Staging model for driver info."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'drivers_master')
     columns:
       - name: driver_id
         data_type: STRING
@@ -176,6 +208,9 @@ models:
         data_type: STRING
   - name: model_stg_orders_status_log
     description: "Staging model for order status log."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'order_log_incentive_sessions_order_status_logs')
     columns:
       - name: log_id
         data_type: BIGINT
@@ -192,6 +227,9 @@ models:
         data_type: STRING
   - name: model_stg_support_ticket
     description: "Staging model for support tickets."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'support_tickets')
     columns:
       - name: ticket_id
         data_type: STRING
@@ -208,8 +246,14 @@ models:
         data_type: STRING
       - name: issue_type
         data_type: STRING
+        tests:
+          - dbt_expectations.expect_column_values_to_have_consistent_casing:
+              display_inconsistent_columns: FALSE
       - name: issue_sub_type
         data_type: STRING
+        tests:
+          - dbt_expectations.expect_column_values_to_have_consistent_casing:
+              display_inconsistent_columns: FALSE
       - name: channel
         data_type: STRING
       - name: ticket_opened_datetime
@@ -226,6 +270,9 @@ models:
         data_type: STRING
   - name: model_stg_driver_incentive_logs
     description: "Staging model for driver incentive logs."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'order_log_incentive_sessions_driver_incentive_logs')
     columns:
       - name: log_id
         data_type: BIGINT
@@ -250,6 +297,9 @@ models:
         data_type: STRING  
   - name: model_stg_restaurant
     description: "Staging model for restaurant info."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'restaurants_master')
     columns:
       - name: restaurant_id
         data_type: STRING
