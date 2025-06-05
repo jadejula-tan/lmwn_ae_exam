@@ -3,6 +3,13 @@ version: 2
 models:
   - name: report_campaign_effectiveness_report
     description: "Report to evaluate the performance of advertising campaigns across digital platforms and understand campaign performance in terms of user engagement, cost efficiency, and resulting transactions."
+    tests:
+      - dbt_expectations.expect_column_distinct_count_to_equal_other_table:
+          description: "Since this report compares different period, the number of rows cannot directly be compared to the staging table. For simplicity, we will compare the number of distinct campaign_id in this report with the staging table."
+          column_name: campaign_id
+          compare_model: ref("model_stg_campaigns")
+          compare_column_name: campaign_id
+          compare_row_condition: "campaign_is_active = TRUE"
     columns:
       - name: campaign_id
         data_type: STRING
@@ -28,6 +35,9 @@ models:
         data_type: DATE
       - name: total_interactions
         data_type: BIGINT
+        tests:
+          - multi_column_sum:
+              multi_col_list: [total_clicks, total_impressions, total_conversions]
       - name: total_clicks
         data_type: HUGEINT
       - name: total_impressions
@@ -57,6 +67,16 @@ models:
         data_type: BIGINT
   - name: report_customer_acquisition_report
     description: "Report to understand how successful each campaign is at acquiring new customers and how those customers behave post-acquisition."
+    tests:
+      - dbt_expectations.expect_column_distinct_count_to_equal_other_table:
+          description: "Since this report expand each campaign by its targeted platform, the number of rows cannot directly be compared to the staging table. For simplicity, we will compare the number of distinct campaign_id in this report with the staging table."
+          column_name: campaign_id
+          compare_model: ref("model_stg_campaigns")
+          compare_column_name: campaign_id
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: ROUND(SUM(total_ad_cost),2)
+          compare_model: ref("model_stg_campaign_interactions")
+          compare_expression: ROUND(SUM(ad_cost),2)
     columns:
       - name: campaign_id
         data_type: STRING
@@ -64,6 +84,9 @@ models:
         data_type: STRING
       - name: campaign_platform
         data_type: STRING
+        tests:
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ['facebook','google','tiktok']
       - name: total_ad_cost
         data_type: DOUBLE
       - name: total_new_customers
@@ -85,6 +108,10 @@ models:
         data_type: DOUBLE
   - name: report_retargeting_performance_report
     description: "Report to evaluate retargeting campaigns that aim to bring back previous or inactive customers and see if the strategy effectively re-engages past users."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: ref("model_stg_campaigns")
+          compare_row_condition: "campaign_type = 'retargeting'"
     columns:
       - name: campaign_id
         data_type: STRING
@@ -103,15 +130,30 @@ models:
       - name: total_purchase_amount
         data_type: DOUBLE
       - name: retargeted_customers_with_reorder_within_7_days
+        description: "Determine retargeted customers retention behavior. Show number of retargeted customers who made a reorder within 7 days."
         data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: retargeted_customers
       - name: retargeted_customers_with_reorder_within_15_days
+        description: "Determine retargeted customers retention behavior. Show number of retargeted customers who made a reorder within 15 days."
         data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: retargeted_customers
       - name: retargeted_customers_with_reorder_within_30_days
+        description: "Determine retargeted customers retention behavior. Show number of retargeted customers who made a reorder within 30 days."
         data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: retargeted_customers
       - name: avg_day_between_original_and_return_order
         data_type: DOUBLE
   - name: report_driver_performance_report
     description: "Assess the effectiveness and reliability of delivery drivers to support workforce evaluation and operational optimization."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: ref("model_stg_drivers")
     columns:
       - name: driver_id
         data_type: STRING
@@ -126,8 +168,14 @@ models:
         data_type: BIGINT
       - name: total_completed_tasks
         data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: total_tasks
       - name: late_completed_tasks
         data_type: BIGINT
+        tests:
+          - column_value_not_greater_than_another_col:
+              compare_col: total_completed_tasks
       - name: avg_delivery_minutes
         data_type: DOUBLE
       - name: avg_time_to_accept_minutes
@@ -150,9 +198,20 @@ models:
         data_type: DOUBLE
   - name: report_delivery_zone_heatmap_report
     description: "Analyze delivery zones to identify high-demand areas and optimize resource allocation."
+    tests:
+      - dbt_expectations.expect_column_distinct_count_to_equal_other_table:
+            column_name: region
+            compare_model: ref("model_stg_drivers")
+            compare_column_name: region
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: SUM(total_drivers)
+          compare_model: ref("model_stg_drivers")
+          compare_expression: COUNT(1)
     columns:
     - name: region
       data_type: STRING
+      tests:
+          - unique
     - name: total_drivers
       data_type: BIGINT
     - name: total_active_drivers
@@ -179,9 +238,26 @@ models:
       data_type: DOUBLE
   - name: report_driver_incentive_impact_report
     description: "Measure whether incentive programs for drivers (e.g., bonuses) lead to improved performance or just higher costs."
+    tests:
+      - dbt_expectations.expect_column_distinct_count_to_equal_other_table:
+            column_name: incentive_program
+            compare_model: ref("model_stg_driver_incentive_logs")
+            compare_column_name: incentive_program
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: SUM(total_orders)
+          compare_model: ref("model_stg_orders")
+          compare_expression: COUNT(DISTINCT order_id)
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: SUM(total_drivers)
+          group_by: [incentive_program]
+          compare_model: ref("model_stg_driver_incentive_logs")
+          compare_group_by: [incentive_program]
+          compare_expression: COUNT(DISTINCT driver_id)
     columns:
       - name: incentive_program
         data_type: STRING
+        tests:
+          - unique
       - name: total_drivers
         data_type: BIGINT
       - name: bonus_qualified_drivers
@@ -199,16 +275,42 @@ models:
       - name: driver_satisfaction_rate
         description: "Driver satisfaction rate based on number of bonus qualified drivers vs. total participating drivers."
         data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1
       - name: average_bonus_qualified_amount
         data_type: DOUBLE
       - name: bonus_to_revenue_ratio
         description: "Ratio of total bonus paid to total revenue generated by drivers. Would be better if we could compare the percentage LMWN gets from each completed order with the total bonus payout, but the info is not available."
         data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1
   - name: report_complaint_summary_dashboard
     description: "High-level overview report of all customer complaints across the platform to prioritize problem areas and improve response processes."
+    tests:
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+            expression: COUNT(1)
+            compare_model: ref("model_stg_support_ticket")
+            compare_expression: COUNT(DISTINCT STRFTIME(ticket_opened_datetime, '%Y-%m'))
+      - dbt_expectations.expect_table_aggregation_to_equal_other_table:
+          expression: SUM(total_tickets)
+          compare_model: ref("model_stg_support_ticket")
+          compare_expression: COUNT(DISTINCT ticket_id)
+      - dbt_utils.expression_is_true:
+          description: "Ensure that the top issue types are distinct."
+          expression: "top_issue_type_1 != top_issue_type_2 AND top_issue_type_1 != top_issue_type_3 AND top_issue_type_2 != top_issue_type_3"
+      - dbt_utils.expression_is_true:
+          description: "Ensure that the top sub-issue types are distinct."
+          expression: "top_sub_issue_type_1 != top_sub_issue_type_2 AND top_sub_issue_type_1 != top_sub_issue_type_3 AND top_sub_issue_type_2 != top_sub_issue_type_3"
     columns:
       - name: month
         data_type: STRING
+        tests:
+          - not_null
+          - unique
       - name: total_tickets
         data_type: BIGINT
       - name: total_unresolved_tickets
@@ -219,6 +321,10 @@ models:
         data_type: HUGEINT
       - name: unresolved_ticket_ratio
         data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1
       - name: avg_resolution_time_minutes
         data_type: DOUBLE
       - name: top_issue_type_1
@@ -238,8 +344,13 @@ models:
     columns:
       - name: driver_id
         data_type: STRING
+        tests:
+          - not_null
+          - unique
       - name: issue_count
         data_type: BIGINT
+        tests:
+          - not_null
       - name: issue_raised_ranked
         description: "List of issue type, ranked by frequency with most frequent first."
         data_type: STRING[]
@@ -250,18 +361,31 @@ models:
       - name: rating_before_complaint
         description: "Driver rating before complaint resolution based on driver rating in master"
         data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 5
       - name: rating_after_complaint
         description: "Calculates a driver's adjusted rating after complaints by averaging their original rating with the total CSAT score from complaint tickets."
         data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 5
   - name: report_restaurant_quality_complaint_report
     description: "Monitor the quality of food and service provided by partner restaurants and ensure they align with platform standards."
     columns:
       - name: restaurant_id
         data_type: STRING
+        tests:
+          - not_null
+          - unique
       - name: restaurant_name
         data_type: STRING
       - name: total_tickets
         data_type: BIGINT
+        tests:
+          - not_null
       - name: issue_raised_ranked
         data_type: STRING[]
       - name: total_resolution_minutes
@@ -272,6 +396,10 @@ models:
         data_type: HUGEINT
       - name: issue_rate
         data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1
       - name: total_customer_with_complaints
         data_type: BIGINT
       - name: total_reorder_customers_after_complaint
@@ -279,3 +407,7 @@ models:
       - name: reorder_customer_lost_ratio
         description: "Percentage of customers who did not reorder after a complaint. A ratio of closer to 1 indicates that a complaint does not desuade customers from reordering."
         data_type: DOUBLE
+        tests:
+        - dbt_expectations.expect_column_values_to_be_between:
+            min_value: 0
+            max_value: 1
