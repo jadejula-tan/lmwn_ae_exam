@@ -1,15 +1,20 @@
-Welcome to your new dbt project!
+# Facts about LMWN assignments
 
-### Using the starter project
+Since the datasoures are mocked data, some fields are not given either intentionally or unintentionally. I've made some business assumption to best
+meet the require insight metrics.
 
-Try running the following commands:
-- dbt run
-- dbt test
+## Validation
+For validation and test, I've imported these two dependecies to use in my project.
+- dbt_expectations
+- dbt_utils
 
+I've created two new custom generic test under macros/generic_maro.sql
+- multi_column_sum
+- column_value_not_greater_than_another_col
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+I added test and validations to the staging models and mart reports, but if given more time, I would add to the intermediate models as well, especially those with multiple upstream reports.
+
+## Improvements I can think of
+- better layering
+- separate yml schema file for each model when working in a more collaborated project. However, since this is a project only I work on, this style works
+- more test both generic and singular to model and columns
