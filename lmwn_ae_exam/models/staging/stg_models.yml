@@ -3,6 +3,8 @@ version: 2
 sources:
   - name: main
     schema: main
+    tags:
+      - external
     tables:
       - name: campaign_master
       - name: order_transactions

@@ -36,4 +36,25 @@ models:
       columns: true
     +contract:
       enforced: true
-    +materialized: table
+    intermediate:
+      +materialized: view
+      +tags:
+        - intermediate
+    staging:
+      +materialized: view
+      +tags:
+        - staging
+    marts:
+      +materialized: table
+      +tags:
+        - marts
+        - reports
+      customer_service:
+        +tags:
+          - customer_service
+      fleet:
+        +tags:
+          - fleet
+      marketing:
+        +tags:
+          - marketing
