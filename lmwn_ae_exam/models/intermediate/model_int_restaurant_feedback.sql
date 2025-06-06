@@ -1,4 +1,5 @@
 WITH restaurant_sub_issue_ranked AS(
+    -- Rank sub issues for each restaurant based on the count of tickets
     SELECT
         restaurant_id,
         issue_sub_type,
@@ -7,11 +8,13 @@ WITH restaurant_sub_issue_ranked AS(
     FROM
         {{ ref('model_stg_support_ticket') }}
     WHERE
+    -- Filter for restaurant related issues only
         issue_type = 'food'
     GROUP BY
         1,
         2
 ), restaurant_issues AS(
+    -- In list form, display the sub issues raised for each restaurant, ranked from most frequent to least frequent
     SELECT
         restaurant_id,
         ARRAY_AGG(issue_sub_type ORDER BY sub_issue_rank DESC) AS issue_raised_ranked

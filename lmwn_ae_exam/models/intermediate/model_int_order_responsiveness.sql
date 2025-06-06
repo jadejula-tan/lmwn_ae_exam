@@ -1,22 +1,25 @@
 WITH created_orders AS (
+    -- Filter for orders created entries
     SELECT
         order_id,
         status_datetime AS created_time
     FROM
         {{ ref('model_stg_orders_status_log') }}
     WHERE
-        LOWER(status) = 'created'
+        status = 'created'
 ),
 accepted_orders AS (
+    -- Filter for orders accepted entries
     SELECT
         order_id,
         status_datetime AS accepted_time
     FROM
         {{ ref('model_stg_orders_status_log') }}
     WHERE
-        LOWER(status) = 'accepted'
+        status = 'accepted'
 ),
 order_acceptance_time AS (
+    -- Calculate minutes taken to accept orders
     SELECT
         co.order_id,
         co.created_time,

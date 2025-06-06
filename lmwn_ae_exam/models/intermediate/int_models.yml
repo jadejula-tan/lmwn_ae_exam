@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: model_int_campaign_interactions_with_details
-    description: "Customers interactions joined with masters for additional details."
+    description: "Campaign interactions with session logs and order details."
     columns:
       - name: interaction_id
         data_type: STRING
@@ -232,7 +232,7 @@ models:
       - name: day_between_original_and_return_order
         data_type: BIGINT
   - name: model_int_order_responsiveness
-    description: "Intermediate model of orders with driver time responsiveness."
+    description: "Model containing orders with driver time responsiveness."
     columns:
       - name: order_id
         description: "Unique identifier for the order."

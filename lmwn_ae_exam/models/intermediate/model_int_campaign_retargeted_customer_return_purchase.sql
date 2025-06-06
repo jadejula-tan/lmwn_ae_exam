@@ -1,4 +1,5 @@
 WITH customer_first_order AS (
+    -- Find customer's first order datetime
     SELECT
         rc.customer_id,
         MIN(o.order_datetime) AS first_order_datetime
@@ -12,6 +13,7 @@ WITH customer_first_order AS (
         1
 )
 SELECT
+    -- Find days between the first order and the campaign interaction/return order
     rc.campaign_id,
     rc.customer_id,
     cfo.first_order_datetime,

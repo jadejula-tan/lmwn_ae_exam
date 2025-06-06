@@ -107,6 +107,7 @@ models:
           compare_expression: COUNT(DISTINCT driver_id)
     columns:
       - name: incentive_program
+        description: "Null incentive program means no incentive was applied, acting as the baseline comparison for other incentive programs."
         data_type: STRING
         tests:
           - unique

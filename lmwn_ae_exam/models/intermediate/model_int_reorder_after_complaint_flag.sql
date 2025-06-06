@@ -1,4 +1,5 @@
 WITH restaurant_ticket_aggregated AS (
+    -- Rank tickets by customer and restaurant to find the first complaint ticket
     SELECT
         customer_id,
         restaurant_id,
@@ -10,6 +11,7 @@ WITH restaurant_ticket_aggregated AS (
     WHERE
         issue_type = 'food'
 ), customer_first_restaurant_ticket AS(
+    -- Filter for the first complaint ticket for each customer and restaurant
     SELECT
         customer_id,
         restaurant_id,
@@ -22,6 +24,7 @@ WITH restaurant_ticket_aggregated AS (
         ticket_rank = 1
 )
 SELECT
+    -- Flag recurring orders of the same customer after their first complaint ticket
     o.order_id,
     o.customer_id,
     o.restaurant_id,
@@ -37,7 +40,6 @@ FROM
 LEFT JOIN
     customer_first_restaurant_ticket AS cfrt
 ON
-    -- Flag recurring orders of the same customer after their first complaint ticket
     o.customer_id = cfrt.customer_id
     AND o.restaurant_id = cfrt.restaurant_id
     AND o.order_id != cfrt.order_id

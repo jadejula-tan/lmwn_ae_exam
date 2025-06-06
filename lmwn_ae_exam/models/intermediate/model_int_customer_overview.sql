@@ -7,9 +7,7 @@ WITH customer_campaign_interaction_rn AS(
     WHERE
         is_new_customer = TRUE
 ), new_customer_campaign_interaction_summary AS(
-    {#
-        Just to make sure there is only one row which is the first interaction of the customer
-    #}
+    -- Find the first campaign interaction of each new customer, incase customers interacted with multiple campaigns
     SELECT
         ccir.customer_id,
         ccir.campaign_id AS first_interacted_campaign_id,
@@ -60,7 +58,7 @@ SELECT
     c.preferred_device,
     cs.total_orders,
     cs.completed_orders,
-    cs.completed_orders - 1 AS total_completed_repeat_orders,
+    cs.completed_orders - 1 AS total_completed_repeat_orders, -- Exclude the first order from repeat orders
     cs.cancelled_orders,
     cs.failed_orders,
     cs.total_purchase_amount,

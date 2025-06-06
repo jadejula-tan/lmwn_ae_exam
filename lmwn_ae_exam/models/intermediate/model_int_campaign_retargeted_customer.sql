@@ -1,5 +1,6 @@
 
 WITH retargeted_cust_recurring AS (
+    -- Find retention bahavior based on recurring orders after different time intervals
     SELECT
         ci.campaign_id,
         ci.customer_id,
@@ -40,10 +41,10 @@ WITH retargeted_cust_recurring AS (
         AND ci.interaction_datetime < ot.order_datetime
         AND ci.order_id != ot.order_id
     WHERE
-        LOWER(c.campaign_type) = 'retargeting'
+        c.campaign_type = 'retargeting'
         AND (
             (ci.is_new_customer = FALSE)
-            OR (lower(cus.status) = 'inactive')
+            OR (cus.status = 'inactive')
         )
     GROUP BY
         1,

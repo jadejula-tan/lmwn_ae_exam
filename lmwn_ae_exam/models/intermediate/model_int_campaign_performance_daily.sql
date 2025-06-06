@@ -15,7 +15,7 @@ SELECT
     SUM(revenue) / SUM(ad_cost) AS return_on_ad_spend,
     AVG(session_duration_minutes) AS average_session_duration,
     COUNT(DISTINCT CASE WHEN is_new_customer THEN customer_id END) AS total_new_customers,
-    COUNT(DISTINCT CASE WHEN LOWER(order_status) = 'completed' THEN customer_id END) AS total_customers_with_completed_orders
+    COUNT(DISTINCT CASE WHEN order_status = 'completed' THEN customer_id END) AS total_customers_with_completed_orders
 FROM
     {{ ref('model_int_campaign_interactions_with_details') }}
 GROUP BY

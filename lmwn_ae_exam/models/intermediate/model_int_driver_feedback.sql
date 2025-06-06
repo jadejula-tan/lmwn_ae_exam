@@ -1,4 +1,5 @@
 WITH driver_sub_issue_ranked AS(
+    -- Rank sub issues for each driver based on the count of tickets
     SELECT
         driver_id,
         issue_sub_type,
@@ -7,11 +8,13 @@ WITH driver_sub_issue_ranked AS(
     FROM
         {{ ref('model_stg_support_ticket') }}
     WHERE
+    -- Filter for driver related issues only
         issue_type in ('rider', 'delivery')
     GROUP BY
         1,
         2
 ), driver_issues AS(
+    -- In list form, display the sub issues raised for each driver, ranked from most frequent to least frequent
     SELECT
         driver_id,
         ARRAY_AGG(issue_sub_type ORDER BY sub_issue_rank DESC) AS issue_raised_ranked

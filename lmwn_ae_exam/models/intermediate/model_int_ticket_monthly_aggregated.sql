@@ -1,3 +1,7 @@
+{#
+    The assignment wants to view the trend over different periods. But the period interval was not specified.
+    Here, I am using month as the period interval.
+#}
 WITH ticket_month_aggregated AS (
     SELECT
         STRFTIME(ticket_opened_datetime, '%Y-%m') AS month,

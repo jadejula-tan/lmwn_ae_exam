@@ -126,6 +126,7 @@ models:
       - name: retargeted_customers_with_recurring_orders
         data_type: BIGINT
       - name: return_to_recurring_customer_ratio
+        description: "Ratio of retargeted customers who became recurring customers."
         data_type: DOUBLE
       - name: total_purchase_amount
         data_type: DOUBLE
