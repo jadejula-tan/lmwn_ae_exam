@@ -44,7 +44,7 @@ LEFT JOIN
 ON
     cm.campaign_id = crrpa.campaign_id
 WHERE
-    LOWER(cm.campaign_type) = 'retargeting'
+    cm.campaign_type = 'retargeting'
 ORDER BY
     cm.targeting_strategy,
     cm.campaign_id
